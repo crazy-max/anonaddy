@@ -36,7 +36,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 'delete-one-click/*', // One-Click Delete
                 'block-email-one-click/*', // One-Click Block Sender Email
                 'block-domain-one-click/*', // One-Click Block Sender Domain
-                'api/auth/login',
             ]
         );
 

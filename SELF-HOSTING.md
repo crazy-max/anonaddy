@@ -313,6 +313,8 @@ In order to parse the Postfix log files and display inbound rejections to your a
 sudo setfacl -m u:johndoe:r /var/log/mail.log
 ```
 
+Run `sudo apt install acl` if the above command fails.
+
 You may also need to add the following to the `postrotate` hook of logrotate so that this is reapplied when you mail log is rotated:
 
 ```bash

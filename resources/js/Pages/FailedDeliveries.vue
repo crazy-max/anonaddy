@@ -148,149 +148,14 @@
     </vue-good-table>
 
     <!-- Pagination -->
-    <div
+    <PaginationControls
       v-if="$page.props.initialRows.data.length"
-      class="mt-4 rounded-lg shadow flex items-center justify-between bg-white px-4 py-3 sm:px-6 overflow-x-auto horizontal-scroll dark:bg-grey-900"
-    >
-      <div class="flex flex-1 justify-between items-center md:hidden gap-x-3">
-        <Link
-          v-if="$page.props.initialRows.prev_page_url"
-          :href="$page.props.initialRows.prev_page_url"
-          as="button"
-          class="relative inline-flex items-center rounded-md border border-grey-300 bg-white px-4 py-2 text-sm font-medium text-grey-700 hover:bg-grey-50 dark:bg-grey-950 dark:hover:bg-grey-900 dark:text-grey-200"
-        >
-          Previous
-        </Link>
-        <span
-          v-else
-          class="relative inline-flex h-min items-center rounded-md border border-grey-300 px-4 py-2 text-sm font-medium text-grey-700 bg-grey-100 dark:bg-grey-800 dark:text-grey-200"
-          >Previous</span
-        >
-        <div class="flex flex-col items-center justify-center gap-y-2">
-          <p class="text-sm text-grey-700 text-center dark:text-grey-200">
-            Showing
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.from.toLocaleString() }}</span>
-            {{ ' ' }}
-            to
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.to.toLocaleString() }}</span>
-            {{ ' ' }}
-            of
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.total.toLocaleString() }}</span>
-            {{ ' ' }}
-            {{ $page.props.initialRows.total === 1 ? 'result' : 'results' }}
-          </p>
-          <select
-            v-model.number="pageSize"
-            @change="updatePageSize"
-            :disabled="updatePageSizeLoading"
-            class="relative rounded border-0 bg-transparent py-1 pr-8 text-grey-900 text-sm ring-1 ring-inset focus:z-10 focus:ring-2 focus:ring-inset ring-grey-300 focus:ring-indigo-600 disabled:cursor-not-allowed dark:text-grey-200"
-          >
-            <option class="dark:bg-grey-900" v-for="size in pageSizeOptions" :value="size">
-              {{ size }}
-            </option>
-          </select>
-        </div>
-        <Link
-          v-if="$page.props.initialRows.next_page_url"
-          :href="$page.props.initialRows.next_page_url"
-          as="button"
-          class="relative inline-flex h-min items-center rounded-md border border-grey-300 bg-white px-4 py-2 text-sm font-medium text-grey-700 dark:bg-grey-950 dark:hover:bg-grey-900 dark:text-grey-200 hover:bg-grey-50"
-        >
-          Next
-        </Link>
-        <span
-          v-else
-          class="relative inline-flex items-center rounded-md border border-grey-300 px-4 py-2 text-sm font-medium text-grey-700 dark:text-grey-200 bg-grey-100 dark:bg-grey-800"
-          >Next</span
-        >
-      </div>
-      <div class="hidden md:flex md:flex-1 md:items-center md:justify-between md:gap-x-2">
-        <div class="flex items-center gap-x-2">
-          <p class="text-sm text-grey-700 dark:text-grey-200">
-            Showing
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.from.toLocaleString() }}</span>
-            {{ ' ' }}
-            to
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.to.toLocaleString() }}</span>
-            {{ ' ' }}
-            of
-            {{ ' ' }}
-            <span class="font-medium">{{ $page.props.initialRows.total.toLocaleString() }}</span>
-            {{ ' ' }}
-            {{ $page.props.initialRows.total === 1 ? 'result' : 'results' }}
-          </p>
-          <select
-            v-model.number="pageSize"
-            @change="updatePageSize"
-            :disabled="updatePageSizeLoading"
-            class="relative rounded border-0 bg-transparent py-1 pr-8 text-grey-900 text-sm ring-1 ring-inset focus:z-10 focus:ring-2 focus:ring-inset ring-grey-300 focus:ring-indigo-600 disabled:cursor-not-allowed dark:text-grey-200"
-          >
-            <option class="dark:bg-grey-900" v-for="size in pageSizeOptions" :value="size">
-              {{ size }}
-            </option>
-          </select>
-        </div>
-
-        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-          <Link
-            v-if="$page.props.initialRows.prev_page_url"
-            :href="$page.props.initialRows.prev_page_url"
-            class="relative inline-flex items-center rounded-l-md border border-grey-300 bg-white px-2 py-2 text-sm font-medium text-grey-500 hover:bg-grey-50 focus:z-20 dark:bg-grey-900 dark:hover:bg-grey-950 dark:border-grey-500"
-          >
-            <span class="sr-only">Previous</span>
-            <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
-          </Link>
-          <span
-            v-else
-            class="disabled cursor-not-allowed relative inline-flex items-center rounded-l-md border border-grey-300 bg-white px-2 py-2 text-sm font-medium text-grey-500 focus:z-20 dark:bg-grey-800 dark:border-grey-500"
-          >
-            <span class="sr-only">Previous</span>
-            <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
-          </span>
-
-          <div v-for="link in links" v-bind:key="link.label">
-            <Link
-              v-if="link.url"
-              :href="link.url"
-              aria-current="page"
-              class="relative inline-flex items-center border z-10 px-4 py-2 text-sm font-medium focus:z-20"
-              :class="
-                link.active
-                  ? 'border-indigo-500 bg-indigo-50 text-indigo-600 dark:bg-grey-950 dark:text-grey-100 dark:border-grey-500'
-                  : 'border-grey-300 bg-white text-grey-500 hover:bg-grey-50 dark:bg-grey-900 dark:hover:bg-grey-950 dark:text-grey-200 dark:border-grey-500'
-              "
-              >{{ link.label }}</Link
-            >
-            <span
-              v-else
-              class="relative inline-flex items-center border border-grey-300 bg-white px-4 py-2 text-sm font-medium text-grey-700 dark:bg-grey-900 dark:text-grey-200 dark:border-grey-500"
-              >...</span
-            >
-          </div>
-
-          <Link
-            v-if="$page.props.initialRows.next_page_url"
-            :href="$page.props.initialRows.next_page_url"
-            class="relative inline-flex items-center rounded-r-md border border-grey-300 bg-white px-2 py-2 text-sm font-medium text-grey-500 hover:bg-grey-50 focus:z-20 dark:bg-grey-900 dark:hover:bg-grey-950 dark:text-grey-200 dark:border-grey-500"
-          >
-            <span class="sr-only">Next</span>
-            <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
-          </Link>
-          <span
-            v-else
-            class="disabled cursor-not-allowed relative inline-flex items-center rounded-r-md border border-grey-300 bg-white px-2 py-2 text-sm font-medium text-grey-500 focus:z-20 dark:bg-grey-800 dark:text-grey-200 dark:border-grey-500"
-          >
-            <span class="sr-only">Next</span>
-            <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
-          </span>
-        </nav>
-      </div>
-    </div>
+      :pagination="$page.props.initialRows"
+      v-model:page-size="pageSize"
+      :page-size-options="pageSizeOptions"
+      :page-size-loading="updatePageSizeLoading"
+      @page-size-change="updatePageSize"
+    />
 
     <div v-else-if="search || filterType !== 'all'" class="text-center">
       <ExclamationTriangleIcon class="mx-auto h-16 w-16 text-grey-400 dark:text-grey-200" />
@@ -473,17 +338,13 @@
 import { ref, watch, onMounted } from 'vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import Modal from '../Components/Modal.vue'
+import PaginationControls from '../Components/PaginationControls.vue'
 import { roundArrow } from 'tippy.js'
 import tippy from 'tippy.js'
 import { notify } from '@kyvg/vue3-notification'
 import { VueGoodTable } from 'vue-good-table-next'
 import Multiselect from '@vueform/multiselect'
-import {
-  InformationCircleIcon,
-  ExclamationTriangleIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@heroicons/vue/24/outline'
+import { InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
   initialRows: {
@@ -512,7 +373,6 @@ onMounted(() => {
 })
 
 const rows = ref(props.initialRows.data)
-const links = ref(props.initialRows.links.slice(1, -1))
 
 const filterType = ref(props.initialFilter)
 const pageSize = ref(props.initialPageSize)
@@ -539,7 +399,6 @@ watch(
   () => props.initialRows,
   newVal => {
     rows.value = newVal.data
-    links.value = newVal.links.slice(1, -1)
   },
 )
 
@@ -646,10 +505,26 @@ const deleteFailedDelivery = id => {
 
   axios
     .delete(`/api/v1/failed-deliveries/${id}`)
-    .then(response => {
-      rows.value = _.reject(rows.value, delivery => delivery.id === id)
-      deleteFailedDeliveryModalOpen.value = false
-      deleteFailedDeliveryLoading.value = false
+    .then(() => {
+      router.reload({
+        only: ['initialRows', 'search', 'initialFilter', 'initialPageSize'],
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: page => {
+          const newRows = page.props.initialRows.data
+          const currentPage = page.props.initialRows.current_page ?? 1
+
+          deleteFailedDeliveryModalOpen.value = false
+          deleteFailedDeliveryLoading.value = false
+
+          if (!newRows.length && currentPage > 1) {
+            visitWithParams({ page: currentPage - 1 }, [])
+            return
+          }
+
+          rows.value = newRows
+        },
+      })
     })
     .catch(error => {
       errorMessage()

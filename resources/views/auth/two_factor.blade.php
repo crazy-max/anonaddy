@@ -23,7 +23,7 @@
 
                         <div class="mt-8 flex flex-wrap">
                             <label for="one_time_password" class="block text-grey-700 text-sm mb-2">
-                                {{ __('One Time Token') }}:
+                                {{ __('One-time Password (OTP)') }}:
                             </label>
 
                             <input id="one_time_password" type="text" class="appearance-none bg-grey-100 rounded w-full p-3 text-grey-700 focus:ring{{ $errors->has('message') ? ' border border-red-500' : '' }}" name="one_time_password" placeholder="123456" autocomplete="one-time-code" required autofocus>

@@ -68,13 +68,11 @@ class ParsePostfixMailLog extends Command
 
         fseek($handle, $lastPosition);
 
-        $allDomains = config('anonaddy.all_domains', []);
-
         $count = 0;
         $storeErrors = 0;
 
-        // Pattern to match syslog and ISO8601 timestamps
-        $pattern = '/^(.*?)\s+(?:[^\s]+\s+)?postfix\/(?:smtpd|cleanup)\[\d+\]:\s*(?:[A-Z0-9]+:\s*)?(?:reject|milter-reject|discard):\s*(?:RCPT|END-OF-MESSAGE) from\s*([^:]+):\s*(?:<[^>]+>:\s*)?(?:(\d{3}\s+\d\.\d\.\d|\d\.\d\.\d)\s+)?(.*?);\s*from=<(.*?)>\s*to=<(.*?)>/i';
+        // Hostname and client address are "hostname[addr]:" where addr may be IPv4 or IPv6 (colons inside brackets).
+        $pattern = '/^(.*?)\s+(?:[^\s]+\s+)?postfix\/(?:smtpd|cleanup)\[\d+\]:\s*(?:[A-Z0-9]+:\s*)?(?:reject|milter-reject|discard):\s*(?:RCPT|END-OF-MESSAGE) from\s+([^\[]+)\[([^\]]+)\]:\s*(?:<[^>]+>:\s*)?(?:(\d{3}\s+\d\.\d\.\d|\d\.\d\.\d)\s+)?(.*?);\s*from=<(.*?)>\s*to=<(.*?)>/i';
 
         while (($line = fgets($handle)) !== false) {
             if (! preg_match('/(?:reject:|milter-reject:|discard:)/', $line) || ! str_contains($line, 'to=<')) {
@@ -83,11 +81,11 @@ class ParsePostfixMailLog extends Command
 
             if (preg_match($pattern, $line, $matches)) {
                 $timestampStr = trim($matches[1]);
-                $remoteMta = trim($matches[2]);
-                $smtpCodeStr = trim($matches[3] ?? '');
-                $reason = trim($matches[4]);
-                $sender = trim($matches[5]);
-                $recipient = trim($matches[6]);
+                $remoteMta = trim($matches[2]).'['.trim($matches[3]).']';
+                $smtpCodeStr = trim($matches[4] ?? '');
+                $reason = trim($matches[5]);
+                $sender = trim($matches[6]);
+                $recipient = trim($matches[7]);
 
                 $smtpCode = '';
                 if ($smtpCodeStr) {
@@ -96,6 +94,10 @@ class ParsePostfixMailLog extends Command
                     $reason = $smtpCodeStr.' '.$reason;
                 } elseif (preg_match('/^(\d{3})\s+(.*)$/', $reason, $reasonMatches)) {
                     $smtpCode = $reasonMatches[1];
+                }
+
+                if ($this->isTransientInboundSmtpCode($smtpCode)) {
+                    continue;
                 }
 
                 try {
@@ -180,6 +182,24 @@ class ParsePostfixMailLog extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * True when the SMTP status indicates a transient failure (4xx or 4.x.x DSN), not a permanent rejection.
+     */
+    protected function isTransientInboundSmtpCode(string $smtpCode): bool
+    {
+        $smtpCode = trim($smtpCode);
+
+        if ($smtpCode === '') {
+            return false;
+        }
+
+        if (preg_match('/^4\d{2}$/', $smtpCode)) {
+            return true;
+        }
+
+        return str_starts_with($smtpCode, '4.');
     }
 
     protected function isDuplicateKeyException(QueryException $e): bool

@@ -3,7 +3,6 @@
 use App\Http\Controllers\AliasExportController;
 use App\Http\Controllers\AliasImportController;
 use App\Http\Controllers\AliasSeparatorController;
-use App\Http\Controllers\Auth\ApiAuthenticationController;
 use App\Http\Controllers\Auth\BackupCodeController;
 use App\Http\Controllers\Auth\ForgotUsernameController;
 use App\Http\Controllers\Auth\PersonalAccessTokenController;
@@ -56,12 +55,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes(['verify' => true, 'register' => config('anonaddy.enable_registration')]);
-
-// API login route needs CSRF middleware so that it can pass it to api/auth/mfa
-Route::controller(ApiAuthenticationController::class)->prefix('api/auth')->group(function () {
-    Route::post('/login', 'login');
-    Route::post('/mfa', 'mfa');
-});
 
 Route::controller(ForgotUsernameController::class)->group(function () {
     Route::get('/username/reminder', 'show')->name('username.reminder.show');

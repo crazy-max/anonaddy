@@ -9,13 +9,19 @@ use App\Http\Requests\StoreBlocklistBulkRequest;
 use App\Http\Resources\BlocklistResource;
 use App\Models\BlockedSender;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BlocklistController extends Controller
 {
     public function index(Request $request)
     {
         $validated = $request->validate([
-            'search' => 'nullable|string|max:100|min:1',
+            'filter' => 'nullable|array',
+            'filter.search' => 'nullable|string|max:100|min:1',
+            'filter.type' => ['nullable', Rule::in(['email', 'domain'])],
+            'sort' => ['nullable', Rule::in(['created_at', 'value', 'blocked', 'last_blocked', '-created_at', '-value', '-blocked', '-last_blocked'])],
+            'page.number' => 'nullable|integer|min:1',
+            'page.size' => 'nullable|integer|min:1|max:100',
         ]);
 
         $query = $request->user()
@@ -23,15 +29,25 @@ class BlocklistController extends Controller
             ->select(['id', 'user_id', 'type', 'value', 'blocked', 'last_blocked', 'updated_at', 'created_at'])
             ->latest();
 
-        if (isset($validated['search'])) {
-            $searchTerm = strtolower($validated['search']);
+        $searchTerm = data_get($validated, 'filter.search');
+
+        if ($searchTerm !== null) {
+            $searchTerm = strtolower($searchTerm);
             $query->where(function ($q) use ($searchTerm) {
-                $q->whereRaw('LOWER(value) LIKE ?', ['%'.$searchTerm.'%'])
-                    ->orWhereRaw('LOWER(type) LIKE ?', ['%'.$searchTerm.'%']);
+                $q->whereRaw('LOWER(value) LIKE ?', ['%'.$searchTerm.'%']);
             });
         }
 
-        return BlocklistResource::collection($query->get());
+        if (isset($validated['filter']['type'])) {
+            $query->where('type', $validated['filter']['type']);
+        }
+
+        $sort = $validated['sort'] ?? '-created_at';
+        $sortDirection = str_starts_with($sort, '-') ? 'desc' : 'asc';
+        $sortColumn = ltrim($sort, '-');
+        $query->orderBy($sortColumn, $sortDirection);
+
+        return BlocklistResource::collection($query->jsonPaginate($request->input('page.size') ?? 100));
     }
 
     public function store(StoreBlockedSenderRequest $request)

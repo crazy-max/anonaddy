@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\IncorrectOtpAttempted;
 use App\Facades\Webauthn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiAuthenticationLoginRequest;
@@ -46,9 +47,10 @@ class ApiAuthenticationController extends Controller
         // Check if user has 2FA enabled, if needs OTP then return mfa_key
         if ($user->two_factor_enabled) {
             return response()->json([
-                'message' => "OTP required, please make a request to /api/auth/mfa with the 'mfa_key', 'otp' and 'device_name' including a 'X-CSRF-TOKEN' header.",
+                'message' => "OTP required, please make a request to /api/auth/mfa with the 'mfa_key', 'otp' and 'device_name'.",
                 'mfa_key' => Crypt::encryptString($user->id.'|'.config('anonaddy.secret').'|'.Carbon::now()->addMinutes(5)->getTimestamp()),
-                'csrf_token' => csrf_token(),
+                // Deprecated compatibility field kept for older app/extension clients.
+                'csrf_token' => 'deprecated',
             ], 422);
         } elseif (Webauthn::enabled($user)) {
             // If WebAuthn is enabled then return currently unsupported message
@@ -112,6 +114,7 @@ class ApiAuthenticationController extends Controller
         $timestamp = $google2fa->verifyKeyNewer($user->two_factor_secret, $request->otp, $lastTimeStamp, config('google2fa.window'));
 
         if (! $timestamp) {
+            event(new IncorrectOtpAttempted($user));
 
             return response()->json([
                 'message' => 'The \'One Time Password\' typed was wrong.',

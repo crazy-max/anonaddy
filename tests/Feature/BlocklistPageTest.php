@@ -34,11 +34,12 @@ class BlocklistPageTest extends TestCase
         $response->assertSuccessful();
         $response->assertInertia(fn (Assert $page) => $page
             ->component('Blocklist/Index')
-            ->has('initialRows', 2, fn (Assert $page) => $page
+            ->has('initialRows.data', 2, fn (Assert $page) => $page
                 ->where('user_id', $this->user->id)
                 ->etc()
             )
             ->has('search')
+            ->where('initialPageSize', 50)
         );
     }
 
@@ -69,6 +70,92 @@ class BlocklistPageTest extends TestCase
                 ],
             ],
         ]);
+    }
+
+    #[Test]
+    public function api_index_is_paginated_with_default_page_size_of_one_hundred(): void
+    {
+        BlockedSender::factory()->count(105)->create([
+            'user_id' => $this->user->id,
+            'type' => 'email',
+        ]);
+
+        $response = $this->getJson('/api/v1/blocklist');
+
+        $response->assertSuccessful();
+        $response->assertJsonCount(100, 'data');
+        $response->assertJsonPath('meta.current_page', 1);
+        $response->assertJsonPath('meta.per_page', 100);
+        $response->assertJsonPath('meta.total', 105);
+    }
+
+    #[Test]
+    public function api_index_can_filter_using_filter_search_query_param(): void
+    {
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'domain',
+            'value' => 'spamdomain.test',
+        ]);
+
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'domain',
+            'value' => 'hamdomain.test',
+        ]);
+
+        $response = $this->getJson('/api/v1/blocklist?filter[search]=spamdomain');
+
+        $response->assertSuccessful();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.value', 'spamdomain.test');
+    }
+
+    #[Test]
+    public function api_index_can_filter_by_type(): void
+    {
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'email',
+            'value' => 'one@example.com',
+        ]);
+
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'domain',
+            'value' => 'domain.test',
+        ]);
+
+        $response = $this->getJson('/api/v1/blocklist?filter[type]=domain');
+
+        $response->assertSuccessful();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.type', 'domain');
+        $response->assertJsonPath('data.0.value', 'domain.test');
+    }
+
+    #[Test]
+    public function api_index_can_sort_by_blocked_ascending(): void
+    {
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'email',
+            'value' => 'high@example.com',
+            'blocked' => 50,
+        ]);
+
+        BlockedSender::factory()->create([
+            'user_id' => $this->user->id,
+            'type' => 'email',
+            'value' => 'low@example.com',
+            'blocked' => 5,
+        ]);
+
+        $response = $this->getJson('/api/v1/blocklist?sort=blocked');
+
+        $response->assertSuccessful();
+        $response->assertJsonPath('data.0.value', 'low@example.com');
+        $response->assertJsonPath('data.1.value', 'high@example.com');
     }
 
     #[Test]
@@ -235,10 +322,10 @@ class BlocklistPageTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertInertia(fn (Assert $page) => $page
-            ->has('initialRows', 2)
+            ->has('initialRows.data', 2)
             ->where('search', 'spam')
         );
-        $rows = $response->data('page')['props']['initialRows'];
+        $rows = $response->data('page')['props']['initialRows']['data'];
         $values = array_column($rows, 'value');
         $this->assertContains('spam@example.com', $values);
         $this->assertContains('spammer.com', $values);

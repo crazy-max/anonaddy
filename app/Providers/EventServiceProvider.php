@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\IncorrectOtpAttempted;
 use App\Listeners\CheckIfShouldBlock;
 use App\Listeners\SendIncorrectOtpNotification;
 use Illuminate\Auth\Events\Registered;
@@ -25,6 +26,9 @@ class EventServiceProvider extends ServiceProvider
             CheckIfShouldBlock::class,
         ],
         LoginFailed::class => [
+            SendIncorrectOtpNotification::class,
+        ],
+        IncorrectOtpAttempted::class => [
             SendIncorrectOtpNotification::class,
         ],
     ];

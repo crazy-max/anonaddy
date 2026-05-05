@@ -58,6 +58,8 @@ Route::get('blocklist-check', [BlocklistCheckController::class, 'check'])
 
 // API auth routes for mobile apps and browser extension
 Route::controller(ApiAuthenticationController::class)->prefix('auth')->group(function () {
+    Route::post('/login', 'login');
+    Route::post('/mfa', 'mfa');
     Route::post('/logout', 'logout');
     Route::post('/delete-account', 'destroy');
 });

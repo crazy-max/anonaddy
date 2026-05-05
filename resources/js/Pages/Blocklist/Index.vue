@@ -79,6 +79,130 @@
       </form>
     </div>
 
+    <div
+      v-if="rows.length || Object.keys(route().params).length"
+      class="flex flex-col sm:flex-row justify-between items-center mb-4 bg-white rounded-lg shadow dark:bg-grey-900"
+    >
+      <div class="relative py-4 flex items-center space-x-1.5 px-4 text-sm sm:px-6">
+        <Listbox as="div" v-model="showEntryType">
+          <div class="relative">
+            <ListboxButton
+              class="inline-flex items-center text-sm text-grey-700 hover:text-grey-900 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-grey-200 dark:hover:text-grey-300"
+            >
+              <span class="sr-only">Change display type</span>
+              <ListboxLabel class="cursor-pointer">Display</ListboxLabel>
+              <p class="ml-1 font-medium">{{ showEntryType.label }}</p>
+              <ChevronDownIcon
+                class="h-5 w-5 text-grey-700 dark:text-grey-200"
+                aria-hidden="true"
+              />
+            </ListboxButton>
+            <transition
+              leave-active-class="transition ease-in duration-100"
+              leave-from-class="opacity-100"
+              leave-to-class="opacity-0"
+            >
+              <ListboxOptions
+                class="absolute z-20 mt-2 w-48 origin-top-left overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+              >
+                <ListboxOption
+                  as="template"
+                  v-for="option in displayOptions"
+                  :key="option.value"
+                  :value="option"
+                  v-slot="{ active, selected }"
+                >
+                  <li
+                    :class="[
+                      active ? 'text-white bg-indigo-500' : 'text-grey-900 dark:text-grey-100',
+                      'cursor-pointer select-none p-2 text-sm',
+                    ]"
+                  >
+                    <div class="flex justify-between">
+                      <p :class="selected ? 'font-semibold' : 'font-normal'">{{ option.label }}</p>
+                      <span
+                        v-if="selected"
+                        :class="active ? 'text-white' : 'text-indigo-500 dark:text-grey-100'"
+                      >
+                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </li>
+                </ListboxOption>
+              </ListboxOptions>
+            </transition>
+          </div>
+        </Listbox>
+      </div>
+      <div class="flex py-4 px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center">
+          <Listbox as="div" v-model="currentSort">
+            <div class="relative">
+              <ListboxButton
+                class="inline-flex items-center text-sm text-grey-700 hover:text-grey-900 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-grey-200 dark:hover:text-grey-300"
+              >
+                <span class="sr-only">Change sort by</span>
+                <ListboxLabel class="cursor-pointer">Sort By</ListboxLabel>
+                <p class="ml-1 font-medium">{{ currentSort.label }}</p>
+                <ChevronDownIcon
+                  class="h-5 w-5 text-grey-700 dark:text-grey-200"
+                  aria-hidden="true"
+                />
+              </ListboxButton>
+              <transition
+                leave-active-class="transition ease-in duration-100"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <ListboxOptions
+                  class="absolute right-0 z-20 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                >
+                  <ListboxOption
+                    as="template"
+                    v-for="option in sortOptions"
+                    :key="option.value"
+                    :value="option"
+                    v-slot="{ active, selected }"
+                  >
+                    <li
+                      :class="[
+                        active ? 'text-white bg-indigo-500' : 'text-grey-900 dark:text-grey-100',
+                        'cursor-pointer select-none p-2 text-sm',
+                      ]"
+                    >
+                      <div class="flex justify-between">
+                        <p :class="selected ? 'font-semibold' : 'font-normal'">
+                          {{ option.label }}
+                        </p>
+                        <span
+                          v-if="selected"
+                          :class="active ? 'text-white' : 'text-indigo-500 dark:text-grey-100'"
+                        >
+                          <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      </div>
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
+
+          <button
+            class="ml-3 disabled:cursor-not-allowed tooltip"
+            :disabled="changeSortDirLoading"
+            @click="changeSortDir()"
+            :data-tippy-content="
+              sortDirection === 'desc' ? 'Change to ascending' : 'Change to descending'
+            "
+          >
+            <BarsArrowDownIcon v-if="sortDirection === 'desc'" class="h-5 w-5" />
+            <BarsArrowUpIcon type="button" v-else class="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div v-if="rows.length" class="relative">
       <div
         v-if="selectedRows.length > 0"
@@ -108,8 +232,7 @@
         :columns="columns"
         :rows="rows"
         :sort-options="{
-          enabled: true,
-          initialSortBy: { field: 'created_at', type: 'desc' },
+          enabled: false,
         }"
         styleClass="vgt-table"
         :row-style-class="rowStyleClassFn"
@@ -117,12 +240,19 @@
         <template #table-column="props">
           <span v-if="props.column.field === 'select'">
             <input
+              v-if="rows.length <= 50"
               type="checkbox"
               class="h-4 w-4 rounded border-grey-300 text-indigo-600 focus:ring-indigo-500 dark:text-indigo-400 dark:bg-grey-950"
               :checked="indeterminate || selectedRowIds.length === rows.length"
               :indeterminate="indeterminate"
               @change="selectedRowIds = $event.target.checked ? rows.map(r => r.id) : []"
             />
+            <div
+              v-else
+              type="checkbox"
+              class="h-4 w-4 rounded border-grey-300 bg-grey-100 border text-indigo-600 focus:ring-indigo-500 tooltip cursor-not-allowed dark:bg-grey-800"
+              data-tippy-content="'Select All' is only available when the page size is 50"
+            ></div>
           </span>
           <span
             v-else-if="props.column.field === 'blocked'"
@@ -146,7 +276,14 @@
               v-if="selectedRowIds.includes(props.row.id)"
               class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
             ></div>
+            <div
+              v-if="selectedRowIds.length >= 50 && !selectedRowIds.includes(props.row.id)"
+              type="checkbox"
+              class="h-4 w-4 rounded border-grey-300 bg-grey-100 text-indigo-600 focus:ring-indigo-500 cursor-not-allowed dark:bg-grey-800"
+              title="You cannot select more than 50 blocklist entries"
+            ></div>
             <input
+              v-else
               type="checkbox"
               class="h-4 w-4 rounded border-grey-300 text-indigo-600 focus:ring-indigo-500 dark:text-indigo-400 dark:bg-grey-950"
               :value="props.row.id"
@@ -200,6 +337,14 @@
         </template>
       </vue-good-table>
     </div>
+    <PaginationControls
+      v-if="props.initialRows.data.length"
+      :pagination="props.initialRows"
+      v-model:page-size="pageSize"
+      :page-size-options="pageSizeOptions"
+      :page-size-loading="updatePageSizeLoading"
+      @page-size-change="updatePageSize"
+    />
 
     <div v-else-if="search" class="text-center py-12">
       <NoSymbolIcon class="mx-auto h-16 w-16 text-grey-400 dark:text-grey-200" />
@@ -350,25 +495,50 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Head, Link, useForm } from '@inertiajs/vue3'
+import { ref, computed, onMounted, watch } from 'vue'
+import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3'
 import axios from 'axios'
 import Modal from '../../Components/Modal.vue'
 import Loader from '../../Components/Loader.vue'
+import PaginationControls from '../../Components/PaginationControls.vue'
 import { VueGoodTable } from 'vue-good-table-next'
 import { notify } from '@kyvg/vue3-notification'
-import { NoSymbolIcon } from '@heroicons/vue/24/outline'
+import {
+  Listbox,
+  ListboxButton,
+  ListboxLabel,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/vue'
+import { NoSymbolIcon, BarsArrowDownIcon, BarsArrowUpIcon } from '@heroicons/vue/24/outline'
+import { ChevronDownIcon, CheckIcon } from '@heroicons/vue/20/solid'
 import { roundArrow } from 'tippy.js'
 import tippy from 'tippy.js'
 
 const props = defineProps({
   initialRows: {
-    type: Array,
+    type: Object,
     required: true,
   },
   search: {
     type: String,
     default: null,
+  },
+  initialPageSize: {
+    type: Number,
+    default: 50,
+  },
+  initialFilterType: {
+    type: String,
+    default: 'all',
+  },
+  initialSort: {
+    type: String,
+    default: 'created_at',
+  },
+  initialSortDirection: {
+    type: String,
+    default: 'desc',
   },
 })
 
@@ -376,7 +546,10 @@ onMounted(() => {
   addTooltips()
 })
 
-const rows = ref([...props.initialRows])
+const rows = ref([...props.initialRows.data])
+const pageSize = ref(props.initialPageSize)
+const pageSizeOptions = [50, 100]
+const updatePageSizeLoading = ref(false)
 const selectedRowIds = ref([])
 const selectedRows = computed(() => rows.value.filter(row => selectedRowIds.value.includes(row.id)))
 const indeterminate = computed(
@@ -392,8 +565,61 @@ const bulkAddType = ref('email')
 const bulkAddText = ref('')
 const bulkAddError = ref(null)
 const addFormLoading = ref(false)
+const changeSortDirLoading = ref(false)
 const idToDelete = ref(null)
 const tippyInstance = ref(null)
+
+const displayOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'domain', label: 'Domain' },
+  { value: 'email', label: 'Email' },
+]
+
+const sortOptions = [
+  { value: 'blocked', label: 'Blocked' },
+  { value: 'created_at', label: 'Created' },
+  { value: 'last_blocked', label: 'Last Blocked' },
+  { value: 'value', label: 'Value' },
+]
+
+const getDisplayOption = value =>
+  displayOptions.find(option => option.value === value) ?? displayOptions[0]
+
+const getSortOption = value => sortOptions.find(option => option.value === value) ?? sortOptions[0]
+
+const showEntryType = ref(getDisplayOption(props.initialFilterType))
+const currentSort = ref(getSortOption(props.initialSort))
+const sortDirection = ref(props.initialSortDirection)
+
+const visitWithParams = (extraParams = {}, omitKeys = []) => {
+  let params = Object.assign({}, route().params, extraParams)
+
+  const keysToOmit = [...omitKeys]
+
+  // Only omit the page_size query when it is the default.
+  if (pageSize.value === 50) {
+    keysToOmit.push('page_size')
+  }
+  if (showEntryType.value.value === 'all') {
+    keysToOmit.push('filter_type')
+  }
+  const sortValue = `${sortDirection.value === 'desc' ? '-' : ''}${currentSort.value.value}`
+  if (sortValue === '-created_at') {
+    keysToOmit.push('sort')
+  }
+
+  router.visit(route('blocklist.index', _.omit(params, keysToOmit)), {
+    only: [
+      'initialRows',
+      'search',
+      'initialPageSize',
+      'initialFilterType',
+      'initialSort',
+      'initialSortDirection',
+    ],
+    preserveState: true,
+  })
+}
 
 const parsedBulkAddValues = computed(() => {
   if (!bulkAddText.value) return []
@@ -403,6 +629,69 @@ const parsedBulkAddValues = computed(() => {
     .filter(Boolean)
     .slice(0, 50)
 })
+
+watch(
+  () => props.initialRows,
+  newVal => {
+    rows.value = [...newVal.data]
+    selectedRowIds.value = []
+    debounceTooltips()
+  },
+)
+
+watch(
+  () => props.initialFilterType,
+  value => {
+    showEntryType.value = getDisplayOption(value)
+  },
+)
+
+watch(
+  () => props.initialSort,
+  value => {
+    currentSort.value = getSortOption(value)
+  },
+)
+
+watch(
+  () => props.initialSortDirection,
+  value => {
+    sortDirection.value = value
+  },
+)
+
+watch(
+  showEntryType,
+  (newValue, oldValue) => {
+    if (!oldValue || newValue.value === oldValue.value) {
+      return
+    }
+
+    visitWithParams({ filter_type: newValue.value }, ['page'])
+  },
+  { deep: true },
+)
+
+watch(
+  currentSort,
+  (newValue, oldValue) => {
+    if (!oldValue || newValue.value === oldValue.value) {
+      return
+    }
+
+    const sortValue = `${sortDirection.value === 'desc' ? '-' : ''}${newValue.value}`
+    visitWithParams({ sort: sortValue }, ['page'])
+  },
+  { deep: true },
+)
+
+const changeSortDir = () => {
+  changeSortDirLoading.value = true
+  sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc'
+  const sortValue = `${sortDirection.value === 'desc' ? '-' : ''}${currentSort.value.value}`
+  visitWithParams({ sort: sortValue }, ['page'])
+  changeSortDirLoading.value = false
+}
 
 const rowStyleClassFn = row =>
   selectedRowIds.value.includes(row.id) ? 'bg-grey-50 dark:bg-grey-950' : ''
@@ -421,11 +710,29 @@ const submitAddForm = () => {
       { type: addForm.type, value: addForm.value },
       { withCredentials: true },
     )
-    .then(({ data }) => {
-      rows.value.push(data.data)
+    .then(() => {
       addForm.reset()
-      debounceTooltips()
-      successMessage('New entry added')
+      selectedRowIds.value = []
+
+      router.reload({
+        only: [
+          'initialRows',
+          'search',
+          'initialPageSize',
+          'initialFilterType',
+          'initialSort',
+          'initialSortDirection',
+        ],
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: page => {
+          rows.value = page.props.initialRows.data
+          pageSize.value = page.props.initialPageSize
+          debounceTooltips()
+          successMessage('New entry added')
+          addFormLoading.value = false
+        },
+      })
     })
     .catch(err => {
       if (err.response?.status === 422 && err.response?.data?.errors) {
@@ -433,10 +740,15 @@ const submitAddForm = () => {
           addForm.setError(key, Array.isArray(messages) ? messages[0] : messages)
         }
       }
-    })
-    .finally(() => {
+
       addFormLoading.value = false
     })
+}
+
+const updatePageSize = () => {
+  updatePageSizeLoading.value = true
+  visitWithParams({ page_size: pageSize.value }, ['page'])
+  updatePageSizeLoading.value = false
 }
 
 const columns = [
@@ -492,6 +804,37 @@ const confirmDelete = () => {
       rows.value = rows.value.filter(row => row.id !== idToDelete.value)
       selectedRowIds.value = selectedRowIds.value.filter(id => id !== idToDelete.value)
       closeDeleteModal()
+      selectedRowIds.value = []
+
+      router.reload({
+        only: [
+          'initialRows',
+          'search',
+          'initialPageSize',
+          'initialFilterType',
+          'initialSort',
+          'initialSortDirection',
+        ],
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: page => {
+          const newRows = page.props.initialRows.data
+          const nextPageSize = page.props.initialPageSize
+          const currentPage = page.props.initialRows.current_page ?? 1
+
+          rows.value = newRows
+          pageSize.value = nextPageSize
+          debounceTooltips()
+
+          if (!newRows.length && currentPage > 1) {
+            deleteLoading.value = false
+            visitWithParams({ page: currentPage - 1 }, [])
+            return
+          }
+
+          deleteLoading.value = false
+        },
+      })
     })
     .catch(error => {
       errorMessage()
@@ -515,6 +858,36 @@ const bulkDeleteBlocklist = () => {
       selectedRowIds.value = []
       bulkDeleteModalOpen.value = false
       successMessage(response.data.message)
+
+      router.reload({
+        only: [
+          'initialRows',
+          'search',
+          'initialPageSize',
+          'initialFilterType',
+          'initialSort',
+          'initialSortDirection',
+        ],
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: page => {
+          const newRows = page.props.initialRows.data
+          const nextPageSize = page.props.initialPageSize
+          const currentPage = page.props.initialRows.current_page ?? 1
+
+          rows.value = newRows
+          pageSize.value = nextPageSize
+          debounceTooltips()
+
+          if (!newRows.length && currentPage > 1) {
+            bulkDeleteLoading.value = false
+            visitWithParams({ page: currentPage - 1 }, [])
+            return
+          }
+
+          bulkDeleteLoading.value = false
+        },
+      })
     })
     .catch(error => {
       bulkDeleteLoading.value = false
@@ -563,6 +936,25 @@ const submitBulkAdd = () => {
       closeBulkAddModal()
       debounceTooltips()
       successMessage(response.data.message)
+
+      router.reload({
+        only: [
+          'initialRows',
+          'search',
+          'initialPageSize',
+          'initialFilterType',
+          'initialSort',
+          'initialSortDirection',
+        ],
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: page => {
+          rows.value = page.props.initialRows.data
+          pageSize.value = page.props.initialPageSize
+          debounceTooltips()
+          bulkAddLoading.value = false
+        },
+      })
     })
     .catch(error => {
       if (error.response?.status === 403) {
@@ -573,8 +965,7 @@ const submitBulkAdd = () => {
       } else {
         bulkAddError.value = 'An error occurred. Please try again.'
       }
-    })
-    .finally(() => {
+
       bulkAddLoading.value = false
     })
 }

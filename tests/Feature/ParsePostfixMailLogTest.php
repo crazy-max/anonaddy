@@ -39,7 +39,7 @@ class ParsePostfixMailLogTest extends TestCase
     {
         $alias = Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'test@anonaddy.me']);
 
-        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected: cannot find your hostname; from=<s@x.com> to=<test@anonaddy.me> proto=ESMTP helo=<1.2.3.4>\n";
+        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.7.1 Client host rejected: policy; from=<s@x.com> to=<test@anonaddy.me> proto=ESMTP helo=<1.2.3.4>\n";
         file_put_contents($this->logPath, $logContent);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
@@ -48,8 +48,8 @@ class ParsePostfixMailLogTest extends TestCase
             'user_id' => $this->user->id,
             'alias_id' => $alias->id,
             'email_type' => 'IR',
-            'code' => '450 4.7.1 Client host rejected: cannot find your hostname',
-            'status' => '450',
+            'code' => '550 5.7.1 Client host rejected: policy',
+            'status' => '550',
             'remote_mta' => 'unknown[1.2.3.4]',
         ]);
 
@@ -58,9 +58,21 @@ class ParsePostfixMailLogTest extends TestCase
         $this->assertEquals('test@anonaddy.me', $failedDelivery->destination);
     }
 
+    public function test_it_skips_transient_four_xx_rejections()
+    {
+        Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'test@anonaddy.me']);
+
+        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected: cannot find your hostname; from=<s@x.com> to=<test@anonaddy.me> proto=ESMTP helo=<1.2.3.4>\n";
+        file_put_contents($this->logPath, $logContent);
+
+        $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
+
+        $this->assertDatabaseCount('failed_deliveries', 0);
+    }
+
     public function test_it_skips_missing_alias()
     {
-        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected; from=<s@x.com> to=<nobody@anonaddy.me> proto=ESMTP helo=<1.2.3.4>\n";
+        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.1.1 User unknown; from=<s@x.com> to=<nobody@anonaddy.me> proto=ESMTP helo=<1.2.3.4>\n";
         file_put_contents($this->logPath, $logContent);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
@@ -72,21 +84,21 @@ class ParsePostfixMailLogTest extends TestCase
     {
         $alias = Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'test@anonaddy.me']);
 
-        $logContent1 = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected; from=<s@x.com> to=<test@anonaddy.me>\n";
+        $logContent1 = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.7.1 Client host rejected; from=<s@x.com> to=<test@anonaddy.me>\n";
         file_put_contents($this->logPath, $logContent1);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
         $this->assertDatabaseCount('failed_deliveries', 1);
 
         // Add a second line to same file
-        $logContent2 = "Mar 17 10:31:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected; from=<b@x.com> to=<test@anonaddy.me>\n";
+        $logContent2 = "Mar 17 10:31:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.7.1 Client host rejected; from=<b@x.com> to=<test@anonaddy.me>\n";
         file_put_contents($this->logPath, $logContent1.$logContent2);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
         $this->assertDatabaseCount('failed_deliveries', 2);
 
         // Simulate log rotation (file smaller)
-        $logContent3 = "Mar 17 10:32:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected; from=<c@x.com> to=<test@anonaddy.me>\n";
+        $logContent3 = "Mar 17 10:32:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.7.1 Client host rejected; from=<c@x.com> to=<test@anonaddy.me>\n";
         file_put_contents($this->logPath, $logContent3);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
@@ -97,7 +109,7 @@ class ParsePostfixMailLogTest extends TestCase
     {
         $alias = Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'test@anonaddy.me']);
 
-        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 450 4.7.1 Client host rejected; from=<s@x.com> to=<test@anonaddy.me>\n";
+        $logContent = "Mar 17 10:30:00 server postfix/smtpd[12345]: NOQUEUE: reject: RCPT from unknown[1.2.3.4]: 550 5.7.1 Client host rejected; from=<s@x.com> to=<test@anonaddy.me>\n";
         file_put_contents($this->logPath, $logContent);
 
         $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
@@ -156,5 +168,35 @@ class ParsePostfixMailLogTest extends TestCase
         $failedDelivery = FailedDelivery::first();
         $this->assertEquals('takedown@b.com', $failedDelivery->sender);
         $this->assertEquals('caloric.test@anonaddy.com', $failedDelivery->destination);
+    }
+
+    public function test_it_parses_reject_lines_with_ipv6_client_address()
+    {
+        Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'xyz@addy.io']);
+
+        $logContent = "Mar 18 10:00:00 mail postfix/smtpd[1]: NOQUEUE: reject: RCPT from unknown[1450:4864:20::441]: <xyz@addy.io>: Recipient address is inactive alias; from=<spam@example.com> to=<xyz@addy.io> proto=ESMTP\n";
+        file_put_contents($this->logPath, $logContent);
+
+        $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
+
+        $failedDelivery = FailedDelivery::first();
+        $this->assertEquals('unknown[1450:4864:20::441]', $failedDelivery->remote_mta);
+        $this->assertEquals('Recipient address is inactive alias', $failedDelivery->code);
+        $this->assertEquals('', $failedDelivery->status);
+    }
+
+    public function test_it_parses_reject_lines_with_ipv6_and_smtp_status_codes()
+    {
+        Alias::factory()->create(['user_id' => $this->user->id, 'email' => 'abc@example.com']);
+
+        $logContent = "Mar 18 10:00:00 mail postfix/smtpd[1]: NOQUEUE: reject: RCPT from unknown[f8b0:4864:20::34f]: 554 5.1.8 <abc@example.com>: Sender address rejected: Domain not found; from=<bad@x.com> to=<abc@example.com> proto=ESMTP\n";
+        file_put_contents($this->logPath, $logContent);
+
+        $this->artisan('anonaddy:parse-postfix-mail-log')->assertExitCode(0);
+
+        $failedDelivery = FailedDelivery::first();
+        $this->assertEquals('unknown[f8b0:4864:20::34f]', $failedDelivery->remote_mta);
+        $this->assertEquals('554 5.1.8 <abc@example.com>: Sender address rejected: Domain not found', $failedDelivery->code);
+        $this->assertEquals('554', $failedDelivery->status);
     }
 }

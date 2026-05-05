@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Auth\WebauthnAuthenticateController;
 use App\Http\Responses\LoginViewResponse;
 use App\Http\Responses\RegisterSuccessResponse;
 use App\Http\Responses\RegisterViewResponse;
@@ -14,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Sanctum\Sanctum;
+use LaravelWebauthn\Http\Controllers\AuthenticateController;
 use LaravelWebauthn\Services\Webauthn;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         Webauthn::registerViewResponseUsing(RegisterViewResponse::class);
         Webauthn::registerSuccessResponseUsing(RegisterSuccessResponse::class);
         Webauthn::loginViewResponseUsing(LoginViewResponse::class);
+
+        $this->app->bind(AuthenticateController::class, WebauthnAuthenticateController::class);
     }
 
     /**

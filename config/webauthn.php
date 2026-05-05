@@ -111,7 +111,7 @@ return [
 
     'redirects' => [
         'login' => '/',
-        'register' => '/settings',
+        'register' => '/settings/security',
     ],
 
     /*

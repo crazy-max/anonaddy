@@ -1,5 +1,6 @@
 {
     "private": true,
+    "name": "anonaddy",
     "scripts": {
         "dev": "vite --host",
         "production": "vite build",

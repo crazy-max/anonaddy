@@ -115,7 +115,7 @@
           <Toggle
             v-if="defaultUsernameId === username.id"
             id="can_login"
-            class="mt-4 !cursor-not-allowed"
+            class="mt-4 cursor-not-allowed!"
             title="You cannot disallow login for your default username"
             v-model="username.can_login"
             disabled="disabled"

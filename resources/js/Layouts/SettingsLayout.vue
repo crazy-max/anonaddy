@@ -26,7 +26,7 @@
                     name="selected-tab"
                     v-model="selectedTabName"
                     @change="visitTab()"
-                    class="mt-1 block w-full rounded-md border-grey-300 py-2 pl-3 pr-10 text-base focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-base dark:text-white dark:bg-white/5"
+                    class="mt-1 block w-full rounded-md border-grey-300 py-2 pl-3 pr-10 text-base focus:border-purple-500 focus:outline-hidden focus:ring-purple-500 sm:text-base dark:text-white dark:bg-white/5"
                   >
                     <option
                       v-for="tab in tabs"

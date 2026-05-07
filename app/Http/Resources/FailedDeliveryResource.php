@@ -20,7 +20,7 @@ class FailedDeliveryResource extends JsonResource
             'sender' => $this->sender,
             'destination' => $this->destination,
             'ir_dedupe_key' => $this->ir_dedupe_key,
-            'type' => $this->type(),
+            'type' => $this->type,
             'email_type' => $this->getRawOriginal('email_type'),
             'email_type_text' => $this->email_type,
             'status' => $this->status,

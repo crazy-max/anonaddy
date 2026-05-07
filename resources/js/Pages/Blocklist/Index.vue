@@ -25,7 +25,7 @@
         </button>
       </div>
       <form class="flex flex-wrap items-end gap-4" @submit.prevent="submitAddForm">
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <label
             for="blocklist-type"
             class="block text-sm font-medium text-grey-700 dark:text-grey-200 mb-1"
@@ -103,7 +103,7 @@
               leave-to-class="opacity-0"
             >
               <ListboxOptions
-                class="absolute z-20 mt-2 w-48 origin-top-left overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                class="absolute z-20 mt-2 w-48 origin-top-left overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
               >
                 <ListboxOption
                   as="template"
@@ -155,7 +155,7 @@
                 leave-to-class="opacity-0"
               >
                 <ListboxOptions
-                  class="absolute right-0 z-20 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                  class="absolute right-0 z-20 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
                 >
                   <ListboxOption
                     as="template"
@@ -215,7 +215,7 @@
       >
         <button
           type="button"
-          class="ml-1 inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+          class="ml-1 inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
           :disabled="bulkDeleteLoading"
           @click="
             selectedRows.length === 1
@@ -263,7 +263,7 @@
           >
             {{ props.column.label }}
             <span
-              class="tooltip outline-none"
+              class="tooltip outline-hidden"
               data-tippy-content="This is the number of times this entry has blocked an email. Hover over the count to see when it last blocked."
             >
               <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -295,14 +295,14 @@
           </span>
           <span
             v-else-if="props.column.field === 'created_at'"
-            class="tooltip outline-none cursor-default text-sm text-grey-500 dark:text-grey-300"
+            class="tooltip outline-hidden cursor-default text-sm text-grey-500 dark:text-grey-300"
             :data-tippy-content="$filters.formatDate(rows[props.row.originalIndex].created_at)"
           >
             {{ $filters.timeAgo(props.row.created_at) }}
           </span>
           <span
             v-else-if="props.column.field === 'value'"
-            class="tooltip cursor-pointer outline-none text-sm font-medium text-grey-700 dark:text-grey-200"
+            class="tooltip cursor-pointer outline-hidden text-sm font-medium text-grey-700 dark:text-grey-200"
             data-tippy-content="Click to copy"
             @click="clipboard(rows[props.row.originalIndex].value)"
           >
@@ -317,7 +317,7 @@
           <span v-else-if="props.column.field === 'blocked'">
             <span
               v-if="rows[props.row.originalIndex].last_blocked"
-              class="tooltip outline-none cursor-default font-semibold text-indigo-800 dark:text-indigo-400"
+              class="tooltip outline-hidden cursor-default font-semibold text-indigo-800 dark:text-indigo-400"
               :data-tippy-content="
                 $filters.timeAgo(rows[props.row.originalIndex].last_blocked) +
                 ' (' +
@@ -328,7 +328,7 @@
             </span>
             <span v-else class="dark:text-grey-300">{{ props.row.blocked.toLocaleString() }} </span>
           </span>
-          <span v-else class="flex items-center justify-center outline-none" tabindex="-1">
+          <span v-else class="flex items-center justify-center outline-hidden" tabindex="-1">
             <button
               type="button"
               class="text-indigo-500 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-500 font-medium"
@@ -360,7 +360,7 @@
       <div class="mt-6">
         <Link
           :href="route('blocklist.index')"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View all blocklist entries
         </Link>

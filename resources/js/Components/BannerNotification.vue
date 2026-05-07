@@ -11,11 +11,11 @@
               <span><slot name="message"></slot></span>
             </p>
           </div>
-          <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+          <div class="order-2 shrink-0 sm:order-3 sm:ml-2">
             <button
               type="button"
               @click="closeNotification"
-              class="-mr-1 flex rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-white"
+              class="-mr-1 flex rounded-md p-2 focus:outline-hidden focus:ring-2 focus:ring-white"
               :class="colours.bgHover"
             >
               <span class="sr-only">Dismiss</span>

@@ -1256,7 +1256,7 @@
             warning tag to the subject line (e.g. [DMARC FAIL] or [SPAM]), or turn off the warning
             altogether.
           </p>
-          <p class="text-base text-grey-700 dark:text-grey-200 !mt-4">
+          <p class="text-base text-grey-700 dark:text-grey-200 mt-4!">
             <b>Please note</b> that turning the warning off completely may increase your risk of
             falling for <b>phishing or spoofed</b> emails. If unsure, always check the
             "<b>X-AnonAddy-Authentication-Results</b>" header.
@@ -1359,12 +1359,12 @@
             emails. On email clients that support it, clicking on it will perform one of these
             actions.
           </p>
-          <p class="text-base text-grey-700 dark:text-grey-200 !mt-4">
+          <p class="text-base text-grey-700 dark:text-grey-200 mt-4!">
             Where an original List-Unsubscribe header is present and contains a mailto: email
             address, addy.io will rewrite it so that the email is sent from your alias and not your
             real email address.
           </p>
-          <p class="text-base text-grey-700 dark:text-grey-200 !mt-4">
+          <p class="text-base text-grey-700 dark:text-grey-200 mt-4!">
             One-click deactivate, delete, block sender email and block sender domain links in
             forwarded emails expire after 30 days for security.
           </p>
@@ -1458,7 +1458,7 @@
             headers. To prevent revealing the contents of emails you can replace the subject with
             something generic below e.g. "The subject" or "Hello".
           </p>
-          <p class="text-base text-grey-700 dark:text-grey-200 !mt-4">
+          <p class="text-base text-grey-700 dark:text-grey-200 mt-4!">
             If set to empty then the email's original subject will be used.
           </p>
         </div>

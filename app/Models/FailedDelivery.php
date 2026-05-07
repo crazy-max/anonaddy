@@ -120,6 +120,27 @@ class FailedDelivery extends Model
         );
     }
 
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            get: function (): string {
+                if ($this->ir_dedupe_key) {
+                    return 'inbound';
+                }
+
+                if ($this->quarantined) {
+                    return 'inbound_quarantined';
+                }
+
+                if ($this->getRawOriginal('email_type') === 'IR') {
+                    return 'inbound';
+                }
+
+                return 'outbound';
+            },
+        );
+    }
+
     protected function status(): Attribute
     {
         return Attribute::make(

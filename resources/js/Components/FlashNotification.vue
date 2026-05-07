@@ -11,11 +11,11 @@
               <span><slot name="message"></slot></span>
             </p>
           </div>
-          <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+          <div class="order-2 shrink-0 sm:order-3 sm:ml-2">
             <button
               type="button"
               @click="show = false"
-              class="-mr-1 flex rounded-md p-2 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-white"
+              class="-mr-1 flex rounded-md p-2 hover:bg-green-200 focus:outline-hidden focus:ring-2 focus:ring-white"
             >
               <span class="sr-only">Dismiss</span>
               <XMarkIcon class="h-6 w-6 text-green-800" aria-hidden="true" />

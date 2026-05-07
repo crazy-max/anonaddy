@@ -206,7 +206,7 @@
             v-model="accessToken"
             @click="selectTokenTextArea"
             id="token-text-area"
-            class="w-full appearance-none bg-grey-100 border border-transparent text-grey-700 focus:outline-none rounded p-3 text-md break-all dark:bg-white/5 dark:text-white"
+            class="w-full appearance-none bg-grey-100 border border-transparent text-grey-700 focus:outline-hidden rounded p-3 text-md break-all dark:bg-white/5 dark:text-white"
             rows="2"
             readonly
           >

@@ -16,7 +16,7 @@
           <div class="flex items-center">
             <span
               :class="`bg-${getAliasStatus().colour}-100`"
-              class="tooltip outline-none h-4 w-4 rounded-full flex items-center justify-center mr-2"
+              class="tooltip outline-hidden h-4 w-4 rounded-full flex items-center justify-center mr-2"
               :data-tippy-content="getAliasStatus().status"
               tabindex="-1"
             >

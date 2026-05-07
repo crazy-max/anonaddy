@@ -84,7 +84,7 @@
           <Toggle
             v-else
             id="hide_email_subject"
-            class="mt-4 !cursor-not-allowed"
+            class="mt-4 cursor-not-allowed!"
             :title="
               recipient.inline_encryption
                 ? 'You need to disable inline encryption before you can enable protected headers (hide subject)'
@@ -121,7 +121,7 @@
           <Toggle
             v-else
             id="use_inline_encryption"
-            class="mt-4 !cursor-not-allowed"
+            class="mt-4 cursor-not-allowed!"
             :title="
               recipient.protected_headers
                 ? 'You need to disable protected headers (hide subject) before you can enable inline encryption'

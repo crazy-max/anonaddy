@@ -11,7 +11,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-grey-500 bg-opacity-75 transition-opacity" />
+        <div class="fixed inset-0 bg-grey-500/75 transition-opacity" />
       </TransitionChild>
 
       <div class="fixed z-10 inset-0 overflow-y-auto">

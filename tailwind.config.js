@@ -1,8 +1,7 @@
-import defaultTheme from 'tailwindcss/defaultTheme'
-import forms from '@tailwindcss/forms'
+const forms = require('@tailwindcss/forms')
 const svgToDataUri = require('mini-svg-data-uri')
 
-export default {
+module.exports = {
   content: [
     'app/**/*.php',
     'resources/**/*.html',
@@ -10,7 +9,6 @@ export default {
     'resources/**/*.php',
     'resources/**/*.vue',
   ],
-  safelist: ['bg-green-400', 'bg-red-400', 'bg-grey-400'],
   theme: {
     colors: {
       current: 'currentColor',
@@ -115,10 +113,6 @@ export default {
       '4xl': '2.25rem',
       '5xl': '3rem',
       '6xl': '4rem',
-    },
-    container: {
-      center: true,
-      padding: '1.5rem',
     },
     extend: {
       backgroundImage: theme => ({

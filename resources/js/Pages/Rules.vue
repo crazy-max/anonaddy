@@ -46,7 +46,7 @@
               <th scope="col" class="p-3 text-left">
                 Applied
                 <span
-                  class="tooltip outline-none"
+                  class="tooltip outline-hidden"
                   data-tippy-content="This is the number of times that the rule has been applied. Hover over the count to see when it was last applied."
                 >
                   <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -77,7 +77,7 @@
                 </td>
                 <td scope="row" class="p-3">
                   <span
-                    class="tooltip outline-none cursor-default text-sm text-grey-500 dark:text-grey-300"
+                    class="tooltip outline-hidden cursor-default text-sm text-grey-500 dark:text-grey-300"
                     :data-tippy-content="$filters.formatDate(element.created_at)"
                     >{{ $filters.timeAgo(element.created_at) }}
                   </span>
@@ -97,7 +97,7 @@
                 <td scope="row" class="p-3">
                   <span
                     v-if="element.last_applied"
-                    class="tooltip outline-none cursor-default font-semibold text-indigo-800 dark:text-indigo-400"
+                    class="tooltip outline-hidden cursor-default font-semibold text-indigo-800 dark:text-indigo-400"
                     :data-tippy-content="
                       $filters.timeAgo(element.last_applied) +
                       ' (' +
@@ -147,7 +147,7 @@
         <Link
           :href="route('rules.index')"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View All Rules
         </Link>
@@ -164,7 +164,7 @@
         <button
           @click="openCreateModal"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Create a Rule
@@ -277,7 +277,7 @@
                         v-model="createRuleObject.conditions[key].currentConditionValue"
                         @keyup.enter="addValueToCondition(createRuleObect, key)"
                         type="text"
-                        class="w-full appearance-none bg-white border border-transparent rounded-l text-grey-700 focus:outline-none p-2 dark:text-white dark:bg-white/5"
+                        class="w-full appearance-none bg-white border border-transparent rounded-l text-grey-700 focus:outline-hidden p-2 dark:text-white dark:bg-white/5"
                         :class="errors.ruleConditions ? 'border-red-500' : ''"
                         placeholder="Enter value"
                         autofocus
@@ -385,7 +385,7 @@
                       <input
                         v-model="createRuleObject.actions[key].value"
                         type="text"
-                        class="w-full appearance-none bg-white border border-transparent rounded text-grey-700 focus:outline-none p-2 dark:text-white dark:bg-white/5"
+                        class="w-full appearance-none bg-white border border-transparent rounded text-grey-700 focus:outline-hidden p-2 dark:text-white dark:bg-white/5"
                         :class="errors.ruleActions ? 'border-red-500' : ''"
                         :placeholder="
                           createRuleObject.actions[key].type === 'subject'
@@ -410,7 +410,7 @@
 
                   <multiselect
                     v-if="createRuleObject.actions[key].type === 'forwardTo'"
-                    class="sm:!ml-4 flex"
+                    class="sm:ml-4! flex"
                     v-model="createRuleObject.actions[key].value"
                     :options="recipientOptions"
                     mode="single"
@@ -628,7 +628,7 @@
                         v-model="editRuleObject.conditions[key].currentConditionValue"
                         @keyup.enter="addValueToCondition(editRuleObect, key)"
                         type="text"
-                        class="w-full appearance-none bg-white border border-transparent rounded-l text-grey-700 focus:outline-none p-2 dark:text-white dark:bg-white/5"
+                        class="w-full appearance-none bg-white border border-transparent rounded-l text-grey-700 focus:outline-hidden p-2 dark:text-white dark:bg-white/5"
                         :class="errors.ruleConditions ? 'border-red-500' : ''"
                         placeholder="Enter value"
                         autofocus
@@ -733,7 +733,7 @@
                       <input
                         v-model="editRuleObject.actions[key].value"
                         type="text"
-                        class="w-full appearance-none bg-white border border-transparent rounded text-grey-700 focus:outline-none p-2 dark:text-white dark:bg-white/5"
+                        class="w-full appearance-none bg-white border border-transparent rounded text-grey-700 focus:outline-hidden p-2 dark:text-white dark:bg-white/5"
                         :class="errors.ruleActions ? 'border-red-500' : ''"
                         :placeholder="
                           editRuleObject.actions[key].type === 'subject'
@@ -758,7 +758,7 @@
 
                   <multiselect
                     v-if="editRuleObject.actions[key].type === 'forwardTo'"
-                    class="sm:!ml-4 flex"
+                    class="sm:ml-4! flex"
                     v-model="editRuleObject.actions[key].value"
                     :options="recipientOptions"
                     mode="single"

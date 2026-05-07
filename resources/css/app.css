@@ -1,4 +1,22 @@
-@tailwind base;
+@import 'tailwindcss';
+@config '../../tailwind.config.js';
+
+@theme {
+  --default-ring-width: 3px;
+  --default-ring-color: var(--color-blue-500);
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 /* Add custom base styles here... */
 html {
@@ -36,8 +54,6 @@ html {
   @apply bg-indigo-50;
 }
 
-@tailwind components;
-
 /* Add custom components here... */
 
 /* purgecss start ignore */
@@ -59,10 +75,10 @@ html {
 
 /* Multiselect default syling start */
 .multiselect {
-  @apply relative mx-auto w-full flex items-center justify-end box-border cursor-pointer border border-grey-300 rounded bg-white text-base leading-snug outline-none;
+  @apply relative mx-auto w-full flex items-center justify-end box-border cursor-pointer border border-grey-300 rounded bg-white text-base leading-snug outline-hidden;
 }
 .dark .multiselect {
-  @apply bg-white/5 !important;
+  @apply bg-white/5;
 }
 .multiselect.is-disabled {
   @apply cursor-default bg-grey-100;
@@ -74,11 +90,11 @@ html {
   @apply rounded-t-none;
 }
 .multiselect.is-active {
-  @apply ring ring-green-500 ring-opacity-30;
+  @apply ring-3 ring-green-500/30;
 }
 
 .multiselect-wrapper {
-  @apply relative mx-auto w-full flex items-center justify-end box-border cursor-pointer outline-none;
+  @apply relative mx-auto w-full flex items-center justify-end box-border cursor-pointer outline-hidden;
 }
 
 .multiselect-single-label {
@@ -86,11 +102,11 @@ html {
 }
 
 .multiselect-single-label-text {
-  @apply overflow-ellipsis overflow-hidden block whitespace-nowrap max-w-full;
+  @apply text-ellipsis overflow-hidden block whitespace-nowrap max-w-full;
 }
 
 .dark .multiselect-single-label-text {
-  @apply text-white !important;
+  @apply text-white;
 }
 
 .multiselect-multiple-label {
@@ -98,15 +114,15 @@ html {
 }
 
 .multiselect-search {
-  @apply w-full absolute inset-0 outline-none focus:ring-0 appearance-none box-border border-0 text-base font-sans bg-white rounded pl-3.5 rtl:pl-0 rtl:pr-3.5;
+  @apply w-full absolute inset-0 outline-hidden focus:ring-0 appearance-none box-border border-0 text-base font-sans bg-white rounded pl-3.5 rtl:pl-0 rtl:pr-3.5;
 }
 
 .dark .multiselect-search {
-  @apply bg-white/5 !important;
+  @apply bg-white/5;
 }
 
 .multiselect-tags {
-  @apply flex-grow flex-shrink flex flex-wrap items-center mt-1 pl-2 rtl:pl-0 rtl:pr-2;
+  @apply grow shrink flex flex-wrap items-center mt-1 pl-2 rtl:pl-0 rtl:pr-2;
 }
 
 .multiselect-tag {
@@ -117,7 +133,7 @@ html {
 }
 
 .multiselect-tag-remove {
-  @apply flex items-center justify-center p-1 mx-0.5 rounded-sm hover:bg-black hover:bg-opacity-10;
+  @apply flex items-center justify-center p-1 mx-0.5 rounded-sm hover:bg-black/10;
 }
 
 .multiselect-tag-remove-icon {
@@ -129,19 +145,19 @@ html {
 }
 
 .multiselect-tags-search-wrapper {
-  @apply inline-block relative mx-1 mb-1 flex-grow flex-shrink h-full;
+  @apply inline-block relative mx-1 mb-1 grow shrink h-full;
 }
 
 .dark .multiselect-tags-search-wrapper {
-  @apply bg-transparent !important;
+  @apply bg-transparent;
 }
 
 .multiselect-tags-search {
-  @apply absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full;
+  @apply absolute inset-0 border-0 outline-hidden focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full;
 }
 
 .dark .multiselect-tags-search {
-  @apply bg-transparent !important;
+  @apply bg-transparent;
 }
 
 .multiselect-tags-search-copy {
@@ -153,14 +169,14 @@ html {
 }
 
 .multiselect-caret {
-  @apply bg-multiselect-caret bg-center bg-no-repeat w-2.5 h-4 py-px box-content mr-3.5 relative z-10 opacity-40 flex-shrink-0 flex-grow-0 transition-transform transform pointer-events-none rtl:mr-0 rtl:ml-3.5;
+  @apply bg-multiselect-caret bg-center bg-no-repeat w-2.5 h-4 py-px box-content mr-3.5 relative z-10 opacity-40 shrink-0 grow-0 transition-transform transform pointer-events-none rtl:mr-0 rtl:ml-3.5;
 }
 .multiselect-caret.is-open {
   @apply rotate-180 pointer-events-auto;
 }
 
 .multiselect-clear {
-  @apply pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-80 rtl:pr-0 rtl:pl-3.5;
+  @apply pr-3.5 relative z-10 opacity-40 transition duration-300 shrink-0 grow-0 flex hover:opacity-80 rtl:pr-0 rtl:pl-3.5;
 }
 
 .multiselect-clear-icon {
@@ -168,7 +184,7 @@ html {
 }
 
 .multiselect-spinner {
-  @apply bg-multiselect-spinner bg-center bg-no-repeat w-4 h-4 z-10 mr-3.5 animate-spin flex-shrink-0 flex-grow-0 rtl:mr-0 rtl:ml-3.5;
+  @apply bg-multiselect-spinner bg-center bg-no-repeat w-4 h-4 z-10 mr-3.5 animate-spin shrink-0 grow-0 rtl:mr-0 rtl:ml-3.5;
 }
 
 .multiselect-inifite {
@@ -176,14 +192,14 @@ html {
 }
 
 .multiselect-inifite-spinner {
-  @apply bg-multiselect-spinner bg-center bg-no-repeat w-4 h-4 z-10 animate-spin flex-shrink-0 flex-grow-0 m-3.5;
+  @apply bg-multiselect-spinner bg-center bg-no-repeat w-4 h-4 z-10 animate-spin shrink-0 grow-0 m-3.5;
 }
 
 .multiselect-dropdown {
   @apply max-h-60 absolute -left-px -right-px bottom-0 transform translate-y-full border border-grey-300 -mt-px overflow-y-scroll z-50 bg-white flex flex-col rounded-b;
 }
 .dark .multiselect-dropdown {
-  @apply bg-grey-900 !important;
+  @apply bg-grey-900;
 }
 .multiselect-dropdown.is-top {
   @apply -translate-y-full top-px bottom-auto rounded-b-none rounded-t;
@@ -210,7 +226,7 @@ html {
   @apply bg-grey-300 text-grey-700;
 }
 .dark .multiselect-group-label.is-pointed {
-  @apply bg-grey-900 !important;
+  @apply bg-grey-900;
 }
 .multiselect-group-label.is-selected {
   @apply bg-green-600 text-white;
@@ -222,7 +238,7 @@ html {
   @apply bg-green-600 text-white opacity-90;
 }
 .multiselect-group-label.is-selected.is-disabled {
-  @apply text-green-100 bg-green-600 bg-opacity-50 cursor-not-allowed;
+  @apply text-green-100 bg-green-600/50 cursor-not-allowed;
 }
 
 .multiselect-group-options {
@@ -233,19 +249,19 @@ html {
   @apply flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3;
 }
 .dark .multiselect-option {
-  @apply text-grey-200 !important;
+  @apply text-grey-200;
 }
 .multiselect-option.is-pointed {
   @apply text-grey-800 bg-grey-100;
 }
 .dark .multiselect-option.is-pointed {
-  @apply bg-grey-950 text-grey-200 !important;
+  @apply bg-grey-950 text-grey-200;
 }
 .multiselect-option.is-selected {
   @apply text-white bg-green-500;
 }
 .dark .multiselect-option.is-selected {
-  @apply text-grey-900 !important;
+  @apply text-grey-900;
 }
 .multiselect-option.is-disabled {
   @apply text-grey-300 cursor-not-allowed;
@@ -254,10 +270,10 @@ html {
   @apply text-white bg-green-500 opacity-90;
 }
 .dark .multiselect-option.is-selected.is-pointed {
-  @apply text-grey-200 !important;
+  @apply text-grey-200;
 }
 .multiselect-option.is-selected.is-disabled {
-  @apply text-green-100 bg-green-500 bg-opacity-50 cursor-not-allowed;
+  @apply text-green-100 bg-green-500/50 cursor-not-allowed;
 }
 
 .multiselect-no-options {
@@ -269,7 +285,7 @@ html {
 }
 
 .multiselect-fake-input {
-  @apply bg-transparent absolute left-0 right-0 -bottom-px w-full h-px border-0 p-0 appearance-none outline-none text-transparent;
+  @apply bg-transparent absolute left-0 right-0 -bottom-px w-full h-px border-0 p-0 appearance-none outline-hidden text-transparent;
 }
 
 .multiselect-assistive-text {
@@ -320,10 +336,10 @@ html {
   @apply text-center;
 }
 .vgt-pull-left {
-  @apply float-left !important;
+  @apply float-left;
 }
 .vgt-pull-right {
-  @apply float-right !important;
+  @apply float-right;
 }
 .vgt-clearfix::after {
   @apply block;
@@ -467,7 +483,7 @@ table.vgt-table tr.clickable:hover {
 }
 .vgt-input:focus,
 .vgt-select:focus {
-  @apply outline-none border-cyan-500;
+  @apply outline-hidden border-cyan-500;
 }
 .vgt-loading {
   @apply absolute w-full z-10;
@@ -616,7 +632,7 @@ table.vgt-table tr.clickable:hover {
   @apply w-auto p-0 border-0 border-r-0 h-auto text-sm ml-2 text-grey-500 font-bold;
 }
 .vgt-wrap__footer .footer__row-count__select:focus {
-  @apply outline-none border-cyan-500;
+  @apply outline-hidden border-cyan-500;
 }
 .vgt-wrap__footer .footer__navigation {
   @apply text-sm;
@@ -633,7 +649,7 @@ table.vgt-table tr.clickable:hover {
   @apply no-underline text-grey-500 font-bold whitespace-nowrap;
 }
 .vgt-wrap__footer .footer__navigation__page-btn:focus {
-  @apply outline-none border-0;
+  @apply outline-hidden border-0;
 }
 .vgt-wrap__footer .footer__navigation__page-btn:hover {
   cursor: pointer;
@@ -694,7 +710,5 @@ table.vgt-table tr.clickable:hover {
   }
 }
 /* purgecss end ignore */
-
-@tailwind utilities;
 
 /* Add custom utilities here... */

@@ -45,7 +45,7 @@
         <span v-if="props.column.label == 'Active'">
           {{ props.column.label }}
           <span
-            class="tooltip outline-none"
+            class="tooltip outline-hidden"
             data-tippy-content="When a username is deactivated, any messages sent to its aliases will be silently discarded. The sender will not be notified of the unsuccessful delivery."
           >
             <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -54,7 +54,7 @@
         <span v-else-if="props.column.label == 'Catch-All'">
           {{ props.column.label }}
           <span
-            class="tooltip outline-none"
+            class="tooltip outline-hidden"
             data-tippy-content="When catch-all is disabled, only aliases that already exist for the username will forward messages. They will not be automatically created on-the-fly unless you are using auto create regex."
           >
             <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -67,13 +67,13 @@
       <template #table-row="props">
         <span
           v-if="props.column.field == 'created_at'"
-          class="tooltip outline-none cursor-default text-sm text-grey-500 dark:text-grey-300"
+          class="tooltip outline-hidden cursor-default text-sm text-grey-500 dark:text-grey-300"
           :data-tippy-content="$filters.formatDate(rows[props.row.originalIndex].created_at)"
           >{{ $filters.timeAgo(props.row.created_at) }}
         </span>
         <span v-else-if="props.column.field == 'username'">
           <button
-            class="tooltip outline-none font-medium text-grey-700 dark:text-grey-200"
+            class="tooltip outline-hidden font-medium text-grey-700 dark:text-grey-200"
             data-tippy-content="Click to copy"
             @click="clipboard(rows[props.row.originalIndex].username)"
           >
@@ -98,7 +98,7 @@
               @keyup.esc="usernameIdToEdit = usernameDescriptionToEdit = ''"
               v-model="usernameDescriptionToEdit"
               type="text"
-              class="grow appearance-none bg-grey-50 border text-grey-700 focus:outline-none rounded px-2 py-1 dark:text-white dark:bg-white/5"
+              class="grow appearance-none bg-grey-50 border text-grey-700 focus:outline-hidden rounded px-2 py-1 dark:text-white dark:bg-white/5"
               :class="
                 usernameDescriptionToEdit.length > 200 ? 'border-red-500' : 'border-transparent'
               "
@@ -114,7 +114,7 @@
             </button>
           </div>
           <div v-else-if="props.row.description" class="flex items-centers">
-            <span class="outline-none text-grey-500 mr-2 dark:text-grey-300">{{
+            <span class="outline-hidden text-grey-500 mr-2 dark:text-grey-300">{{
               $filters.truncate(props.row.description, 60)
             }}</span>
             <button
@@ -190,7 +190,7 @@
             @off="disableCatchAll(props.row.id)"
           />
         </span>
-        <span v-else class="flex items-center justify-center outline-none" tabindex="-1">
+        <span v-else class="flex items-center justify-center outline-hidden" tabindex="-1">
           <Link
             :href="route('usernames.edit', props.row.id)"
             as="button"
@@ -223,7 +223,7 @@
         <Link
           :href="route('usernames.index')"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View All Usernames
         </Link>

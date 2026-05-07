@@ -23,7 +23,7 @@
         <select
           v-model="filterType"
           @change="updateFilter"
-          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-grey-300 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm rounded-md dark:border-grey-600 dark:bg-grey-700 dark:text-grey-200"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-grey-300 focus:outline-hidden focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm rounded-md dark:border-grey-600 dark:bg-grey-700 dark:text-grey-200"
         >
           <option value="all">All</option>
           <option value="outbound">Outbound Bounces</option>
@@ -48,7 +48,7 @@
         <template #table-column="props">
           <div
             v-if="props.column.field === 'actions'"
-            class="relative flex w-full h-full min-h-full self-stretch items-center justify-start outline-none bg-white px-3 dark:bg-grey-900"
+            class="relative flex w-full h-full min-h-full self-stretch items-center justify-start outline-hidden bg-white px-3 dark:bg-grey-900"
           >
             <span
               class="pointer-events-none absolute inset-y-0 -left-6 hidden lg:block w-6 bg-gradient-to-r from-transparent to-white dark:to-grey-900"
@@ -61,7 +61,7 @@
           >
             <span>{{ props.column.label }}</span>
             <span
-              class="tooltip outline-none"
+              class="tooltip outline-hidden"
               data-tippy-content="This shows the type of email that was attempted, e.g. a Forward, Reply, Send, Reset Password, etc. and also the failed delivery type"
             >
               <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -74,7 +74,7 @@
         <template #table-row="props">
           <span
             v-if="props.column.field == 'created_at'"
-            class="tooltip outline-none cursor-default text-sm text-grey-500 dark:text-grey-300"
+            class="tooltip outline-hidden cursor-default text-sm text-grey-500 dark:text-grey-300"
             :data-tippy-content="$filters.formatDate(rows[props.row.originalIndex].created_at)"
             >{{ $filters.timeAgo(props.row.created_at) }}
           </span>
@@ -100,7 +100,7 @@
           </span>
           <span v-else-if="props.column.field == 'destination'">
             <span
-              class="tooltip cursor-pointer outline-none text-sm font-medium text-grey-700 dark:text-grey-200"
+              class="tooltip cursor-pointer outline-hidden text-sm font-medium text-grey-700 dark:text-grey-200"
               data-tippy-content="Click to copy"
               @click="clipboard(rows[props.row.originalIndex].destination)"
               >{{ rows[props.row.originalIndex].destination }}</span
@@ -116,7 +116,7 @@
           </span>
           <span v-else-if="props.column.field == 'alias'">
             <span
-              class="tooltip cursor-pointer outline-none text-sm font-medium text-grey-700 dark:text-grey-200"
+              class="tooltip cursor-pointer outline-hidden text-sm font-medium text-grey-700 dark:text-grey-200"
               data-tippy-content="Click to copy"
               @click="
                 clipboard(
@@ -133,7 +133,7 @@
             class="text-sm font-medium text-grey-700 dark:text-grey-200"
           >
             <span
-              class="tooltip cursor-pointer outline-none"
+              class="tooltip cursor-pointer outline-hidden"
               data-tippy-content="Click to copy"
               @click="clipboard(rows[props.row.originalIndex].sender)"
               >{{ props.row.sender }}</span
@@ -158,7 +158,7 @@
           </span>
           <span
             v-else-if="props.column.field == 'code'"
-            class="tooltip block max-w-xs cursor-pointer outline-none truncate text-sm text-grey-500 dark:text-grey-300"
+            class="tooltip block max-w-xs cursor-pointer outline-hidden truncate text-sm text-grey-500 dark:text-grey-300"
             :data-tippy-content="rows[props.row.originalIndex].code"
             @click="clipboard(rows[props.row.originalIndex].code)"
           >
@@ -166,7 +166,7 @@
           </span>
           <span
             v-else-if="props.column.field == 'attempted_at'"
-            class="tooltip outline-none text-sm text-grey-500 dark:text-grey-300"
+            class="tooltip outline-hidden text-sm text-grey-500 dark:text-grey-300"
             :data-tippy-content="
               $filters.formatDateTime(rows[props.row.originalIndex].attempted_at)
             "
@@ -174,7 +174,7 @@
           </span>
           <div
             v-else
-            class="flex w-full h-full min-h-full self-stretch items-center justify-center outline-none bg-white px-3 dark:bg-grey-900"
+            class="flex w-full h-full min-h-full self-stretch items-center justify-center outline-hidden bg-white px-3 dark:bg-grey-900"
             tabindex="-1"
           >
             <span
@@ -238,7 +238,7 @@
         <Link
           :href="route('failed_deliveries.index')"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View All Failed Deliveries
         </Link>

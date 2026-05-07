@@ -64,7 +64,7 @@
               leave-to-class="opacity-0"
             >
               <ListboxOptions
-                class="absolute z-20 mt-2 w-48 origin-top-left overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                class="absolute z-20 mt-2 w-48 origin-top-left overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
               >
                 <ListboxOption
                   as="template"
@@ -100,21 +100,21 @@
         </Listbox>
         <span
           v-if="['all', 'active_inactive', 'active'].includes(showAliasStatus.value)"
-          class="bg-green-100 tooltip outline-none h-4 w-4 rounded-full flex items-center justify-center"
+          class="bg-green-100 tooltip outline-hidden h-4 w-4 rounded-full flex items-center justify-center"
           data-tippy-content="Active"
           tabindex="-1"
           ><span class="bg-green-400 h-2 w-2 rounded-full"></span
         ></span>
         <span
           v-if="['all', 'active_inactive', 'inactive'].includes(showAliasStatus.value)"
-          class="bg-grey-100 tooltip outline-none h-4 w-4 rounded-full flex items-center justify-center"
+          class="bg-grey-100 tooltip outline-hidden h-4 w-4 rounded-full flex items-center justify-center"
           data-tippy-content="Inactive"
           tabindex="-1"
           ><span class="bg-grey-400 h-2 w-2 rounded-full"></span
         ></span>
         <span
           v-if="['all', 'deleted'].includes(showAliasStatus.value)"
-          class="bg-red-100 tooltip outline-none h-4 w-4 rounded-full flex items-center justify-center"
+          class="bg-red-100 tooltip outline-hidden h-4 w-4 rounded-full flex items-center justify-center"
           data-tippy-content="Deleted"
           tabindex="-1"
           ><span class="bg-red-400 h-2 w-2 rounded-full"></span
@@ -131,7 +131,7 @@
                 aria-hidden="true"
               />
               <span
-                class="ml-1 outline-none inline-flex items-center"
+                class="ml-1 outline-hidden inline-flex items-center"
                 :class="
                   selectedPinnedFilter.value === 'unpinned'
                     ? 'text-grey-500 dark:text-grey-400'
@@ -154,7 +154,7 @@
               leave-to-class="opacity-0"
             >
               <ListboxOptions
-                class="absolute right-0 left-auto z-20 mt-1 w-40 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                class="absolute right-0 left-auto z-20 mt-1 w-40 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
               >
                 <ListboxOption
                   as="template"
@@ -211,7 +211,7 @@
                 leave-to-class="opacity-0"
               >
                 <ListboxOptions
-                  class="absolute right-0 z-20 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                  class="absolute right-0 z-20 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
                 >
                   <ListboxOption
                     as="template"
@@ -271,7 +271,7 @@
         >
           <button
             type="button"
-            class="ml-1 inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="ml-1 inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkActivate() || bulkActivateAliasLoading"
             @click="bulkActivateAlias()"
           >
@@ -279,7 +279,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkDeactivate() || bulkDeactivateAliasLoading"
             @click="bulkDeactivateAlias()"
           >
@@ -287,7 +287,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkPin() || bulkPinAliasLoading"
             @click="selectedRows.length === 1 ? pinAlias(selectedRows[0]) : bulkPinAlias()"
           >
@@ -295,7 +295,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkUnpin() || bulkUnpinAliasLoading"
             @click="selectedRows.length === 1 ? unpinAlias(selectedRows[0]) : bulkUnpinAlias()"
           >
@@ -303,7 +303,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700 whitespace-nowrap"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700 whitespace-nowrap"
             :disabled="bulkEditAliasRecipientsLoading"
             @click="
               selectedRows.length === 1
@@ -315,7 +315,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkDelete()"
             @click="
               selectedAliasesToDelete.length === 1
@@ -327,7 +327,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             @click="
               selectedRowIds.length === 1
                 ? openForgetModal(selectedRows[0])
@@ -338,7 +338,7 @@
           </button>
           <button
             type="button"
-            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
+            class="inline-flex items-center rounded border border-grey-300 bg-white px-2.5 py-1.5 text-xs font-medium text-grey-700 shadow-sm hover:bg-grey-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:bg-grey-700"
             :disabled="disabledBulkRestore()"
             @click="
               selectedAliasesToRestore.length === 1
@@ -389,7 +389,7 @@
             <span v-else-if="props.column.label == 'Active'">
               {{ props.column.label }}
               <span
-                class="tooltip outline-none"
+                class="tooltip outline-hidden"
                 data-tippy-content="When an alias is deactivated, any messages sent to it will be silently discarded. The sender will not be notified of the unsuccessful delivery."
               >
                 <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -423,7 +423,7 @@
             <span v-else-if="props.column.field == 'created_at'" class="flex items-center">
               <span
                 :class="`bg-${getAliasStatus(props.row).colour}-100`"
-                class="tooltip outline-none h-4 w-4 rounded-full flex items-center justify-center mr-2"
+                class="tooltip outline-hidden h-4 w-4 rounded-full flex items-center justify-center mr-2"
                 :data-tippy-content="getAliasStatus(props.row).status"
                 tabindex="-1"
               >
@@ -433,7 +433,7 @@
                 ></span>
               </span>
               <span
-                class="tooltip outline-none cursor-default text-sm whitespace-nowrap text-grey-500 dark:text-grey-300"
+                class="tooltip outline-hidden cursor-default text-sm whitespace-nowrap text-grey-500 dark:text-grey-300"
                 :data-tippy-content="$filters.formatDate(rows[props.row.originalIndex].created_at)"
                 >{{ $filters.timeAgo(props.row.created_at) }}
               </span>
@@ -442,14 +442,14 @@
               <div class="flex items-center">
                 <span
                   v-if="props.row.pinned"
-                  class="mr-1 tooltip outline-none inline-flex items-center text-yellow-500 dark:text-yellow-400 cursor-default"
+                  class="mr-1 tooltip outline-hidden inline-flex items-center text-yellow-500 dark:text-yellow-400 cursor-default"
                   data-tippy-content="Pinned"
                   aria-hidden="true"
                 >
                   <icon name="pin" class="inline-block w-4 h-4 fill-current" />
                 </span>
                 <button
-                  class="text-grey-400 tooltip outline-none text-left"
+                  class="text-grey-400 tooltip outline-hidden text-left"
                   data-tippy-content="Click to copy"
                   @click="clipboard(getAliasEmail(rows[props.row.originalIndex]))"
                 >
@@ -523,19 +523,19 @@
             >
               <span
                 v-if="props.row.recipients.length && props.row.id !== recipientsAliasToEdit.id"
-                class="inline-block tooltip outline-none font-semibold text-indigo-800 dark:text-indigo-400"
+                class="inline-block tooltip outline-hidden font-semibold text-indigo-800 dark:text-indigo-400"
                 :data-tippy-content="recipientsTooltip(props.row.recipients)"
               >
                 {{ props.row.recipients.length }}
               </span>
               <span
                 v-else-if="props.row.id === recipientsAliasToEdit.id"
-                class="inline-block outline-none font-semibold text-indigo-800 dark:text-indigo-400"
+                class="inline-block outline-hidden font-semibold text-indigo-800 dark:text-indigo-400"
                 >{{ aliasRecipientsToEdit.length ? aliasRecipientsToEdit.length : '1' }}</span
               >
               <span
                 v-else-if="has(props.row.aliasable, 'default_recipient.email')"
-                class="py-1 px-2 text-xs bg-yellow-200 text-yellow-900 rounded-full tooltip outline-none cursor-default"
+                class="py-1 px-2 text-xs bg-yellow-200 text-yellow-900 rounded-full tooltip outline-hidden cursor-default"
                 :data-tippy-content="props.row.aliasable.default_recipient.email"
                 >{{
                   props.row.aliasable_type === 'App\\Models\\Domain' ? 'domain' : 'username'
@@ -543,7 +543,7 @@
               >
               <span
                 v-else
-                class="py-1 px-2 text-xs bg-yellow-200 text-yellow-900 rounded-full tooltip outline-none cursor-default"
+                class="py-1 px-2 text-xs bg-yellow-200 text-yellow-900 rounded-full tooltip outline-hidden cursor-default"
                 :data-tippy-content="$page.props.user.email"
                 >default</span
               >
@@ -557,7 +557,7 @@
             >
               <span
                 v-if="props.row.last_forwarded"
-                class="tooltip outline-none cursor-default"
+                class="tooltip outline-hidden cursor-default"
                 :data-tippy-content="
                   $filters.timeAgo(props.row.last_forwarded) +
                   ' (' +
@@ -570,7 +570,7 @@
               <span class="text-grey-300 mx-1.5">/</span>
               <span
                 v-if="props.row.last_blocked"
-                class="tooltip outline-none cursor-default"
+                class="tooltip outline-hidden cursor-default"
                 :data-tippy-content="
                   $filters.timeAgo(props.row.last_blocked) +
                   ' (' +
@@ -587,7 +587,7 @@
             >
               <span
                 v-if="props.row.last_replied"
-                class="tooltip outline-none cursor-default"
+                class="tooltip outline-hidden cursor-default"
                 :data-tippy-content="
                   $filters.timeAgo(props.row.last_replied) +
                   ' (' +
@@ -600,7 +600,7 @@
               <span class="text-grey-300 mx-1.5">/</span>
               <span
                 v-if="props.row.last_sent"
-                class="tooltip outline-none cursor-default"
+                class="tooltip outline-hidden cursor-default"
                 :data-tippy-content="
                   $filters.timeAgo(props.row.last_sent) +
                   ' (' +
@@ -618,7 +618,7 @@
                 @off="deactivateAlias(rows[props.row.originalIndex])"
               />
             </span>
-            <span v-else class="flex items-center justify-center outline-none" tabindex="-1">
+            <span v-else class="flex items-center justify-center outline-hidden" tabindex="-1">
               <Link
                 :href="route('aliases.edit', props.row.id)"
                 as="button"
@@ -663,7 +663,7 @@
         <Link
           :href="route('aliases.index')"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View All Aliases
         </Link>
@@ -725,7 +725,7 @@
         <button
           @click="createAliasModalOpen = true"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           <PlusIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Create Your First Alias
@@ -1275,7 +1275,7 @@
       <template v-slot:content>
         <p class="my-8 text-grey-700 dark:text-grey-200">
           <button
-            class="text-grey-400 tooltip outline-none"
+            class="text-grey-400 tooltip outline-hidden"
             data-tippy-content="Click to copy"
             @click="clipboard(getNewAliasEmail())"
           >

@@ -72,7 +72,7 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-grey-600 bg-opacity-75" />
+          <div class="fixed inset-0 bg-grey-600/75" />
         </TransitionChild>
 
         <div class="fixed inset-0 z-40 flex">
@@ -100,7 +100,7 @@
                 <div class="absolute top-1 right-0 -mr-14 p-1">
                   <button
                     type="button"
-                    class="h-12 w-12 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white"
+                    class="h-12 w-12 rounded-full flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-white"
                     @click="mobileMenuOpen = false"
                   >
                     <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
@@ -108,7 +108,7 @@
                   </button>
                 </div>
               </TransitionChild>
-              <div class="flex-shrink-0 px-4 flex items-center">
+              <div class="shrink-0 px-4 flex items-center">
                 <Link @click="mobileMenuOpen = false" :href="route('dashboard.index')">
                   <img class="h-6" alt="addy.io Logo" src="/svg/icon-logo.svg" />
                 </Link>
@@ -167,7 +167,7 @@
               </div>
             </DialogPanel>
           </TransitionChild>
-          <div class="flex-shrink-0 w-14" aria-hidden="true">
+          <div class="shrink-0 w-14" aria-hidden="true">
             <!-- Dummy element to force sidebar to shrink to fit close icon -->
           </div>
         </div>
@@ -178,11 +178,11 @@
     <div class="flex-1 flex flex-col overflow-hidden min-h-screen md:pl-28">
       <header class="w-full">
         <div
-          class="relative z-10 flex-shrink-0 h-16 bg-white border-b border-grey-200 shadow-sm flex dark:bg-grey-900 dark:border-grey-600"
+          class="relative z-10 shrink-0 h-16 bg-white border-b border-grey-200 shadow-sm flex dark:bg-grey-900 dark:border-grey-600"
         >
           <button
             type="button"
-            class="border-r border-grey-200 px-4 text-grey-500 focus:outline-none md:hidden dark:border-grey-600"
+            class="border-r border-grey-200 px-4 text-grey-500 focus:outline-hidden md:hidden dark:border-grey-600"
             @click="mobileMenuOpen = true"
           >
             <span class="sr-only">Open sidebar</span>
@@ -196,7 +196,7 @@
                   class="relative w-full text-grey-400 focus-within:text-grey-600 dark:text-white dark:focus-within:text-white"
                 >
                   <div class="pointer-events-none absolute inset-y-0 left-1.5 flex items-center">
-                    <MagnifyingGlassIcon class="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+                    <MagnifyingGlassIcon class="shrink-0 h-5 w-5" aria-hidden="true" />
                   </div>
                   <input
                     @keyup.esc="
@@ -212,7 +212,7 @@
                     name="search-input"
                     id="search-input"
                     v-model="searchForm.search"
-                    class="h-full w-full leading-none border-indigo-50 border-2 py-2 pl-8 pr-3 text-base text-grey-900 placeholder-grey-500 focus:outline-none focus:border-indigo-50npm focus:ring-0 focus:placeholder-grey-400 outline-none rounded-l-md bg-indigo-50 dark:bg-white/5 dark:placeholder-grey-200 dark:border-grey-400 dark:text-white"
+                    class="h-full w-full leading-none border-indigo-50 border-2 py-2 pl-8 pr-3 text-base text-grey-900 placeholder-grey-500 focus:outline-hidden focus:border-indigo-50npm focus:ring-0 focus:placeholder-grey-400 outline-hidden rounded-l-md bg-indigo-50 dark:bg-white/5 dark:placeholder-grey-200 dark:border-grey-400 dark:text-white"
                     placeholder="Search"
                     type="search"
                   />
@@ -263,7 +263,7 @@
                     leave-to-class="opacity-0"
                   >
                     <ListboxOptions
-                      class="origin-top-right absolute z-10 right-0 mt-2 w-64 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-grey-200 ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900 dark:text-white dark:divide-grey-500"
+                      class="origin-top-right absolute z-10 right-0 mt-2 w-64 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-grey-200 ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900 dark:text-white dark:divide-grey-500"
                     >
                       <ListboxOption
                         as="template"
@@ -314,7 +314,7 @@
             </div>
             <div class="ml-2 flex items-center space-x-4 sm:ml-6 sm:space-x-6">
               <!-- Profile dropdown -->
-              <Menu as="div" class="relative flex-shrink-0" role="menu">
+              <Menu as="div" class="relative shrink-0" role="menu">
                 <div>
                   <MenuButton
                     class="bg-white rounded-sm flex text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-grey-900"
@@ -343,7 +343,7 @@
                   leave-to-class="transform opacity-0 scale-95"
                 >
                   <MenuItems
-                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-grey-900"
+                    class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black/5 focus:outline-hidden dark:bg-grey-900"
                   >
                     <MenuItem v-slot="{ active }" as="div">
                       <a
@@ -352,7 +352,7 @@
                         rel="nofollow noreferrer noopener"
                         :class="[
                           active ? 'bg-indigo-500 text-white' : 'text-grey-700 dark:text-white',
-                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-none focus:bg-grey-100 transition dark:focus:bg-grey-700',
+                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-hidden focus:bg-grey-100 transition dark:focus:bg-grey-700',
                         ]"
                       >
                         <span class="sr-only">API Docs</span>
@@ -372,7 +372,7 @@
                         rel="nofollow noreferrer noopener"
                         :class="[
                           active ? 'bg-indigo-500 text-white' : 'text-grey-700 dark:text-white',
-                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-none focus:bg-grey-100 transition dark:focus:bg-grey-700',
+                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-hidden focus:bg-grey-100 transition dark:focus:bg-grey-700',
                         ]"
                       >
                         <span class="sr-only">Blog</span>
@@ -392,7 +392,7 @@
                         rel="nofollow noreferrer noopener"
                         :class="[
                           active ? 'bg-indigo-500 text-white' : 'text-grey-700 dark:text-white',
-                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-none focus:bg-grey-100 transition dark:focus:bg-grey-700',
+                          'block w-full px-4 py-2 text-base leading-5 text-left focus:outline-hidden focus:bg-grey-100 transition dark:focus:bg-grey-700',
                         ]"
                       >
                         <span class="sr-only">Help</span>

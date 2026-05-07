@@ -45,7 +45,7 @@
         <span v-if="props.column.label == 'Key'">
           {{ props.column.label }}
           <span
-            class="tooltip outline-none"
+            class="tooltip outline-hidden"
             :data-tippy-content="`Use this to attach recipients to new aliases as they are created e.g. alias+key@${$page.props.user.username}.anonaddy.com. You can attach multiple recipients by doing alias+2.3.4@${$page.props.user.username}.anonaddy.com. Separating each key by a full stop.`"
           >
             <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -54,7 +54,7 @@
         <span v-else-if="props.column.label == 'Alias Count'">
           {{ props.column.label }}
           <span
-            class="tooltip outline-none"
+            class="tooltip outline-hidden"
             data-tippy-content="This shows the total number of aliases that either the recipient is directly assigned to, or where the recipient is set as the default for a custom domain or username."
           >
             <icon name="info" class="inline-block w-4 h-4 text-grey-300 fill-current" />
@@ -67,7 +67,7 @@
       <template #table-row="props">
         <span
           v-if="props.column.field == 'created_at'"
-          class="tooltip outline-none cursor-default text-sm text-grey-500 dark:text-grey-300"
+          class="tooltip outline-hidden cursor-default text-sm text-grey-500 dark:text-grey-300"
           :data-tippy-content="$filters.formatDate(rows[props.row.originalIndex].created_at)"
           >{{ $filters.timeAgo(props.row.created_at) }}
         </span>
@@ -76,7 +76,7 @@
         </span>
         <span v-else-if="props.column.field == 'email'">
           <button
-            class="tooltip outline-none font-medium text-grey-700 dark:text-grey-200"
+            class="tooltip outline-hidden font-medium text-grey-700 dark:text-grey-200"
             data-tippy-content="Click to copy"
             @click="clipboard(rows[props.row.originalIndex].email)"
           >
@@ -176,7 +176,7 @@
             Resend email
           </button>
         </span>
-        <span v-else class="outline-none whitespace-nowrap" tabindex="-1">
+        <span v-else class="outline-hidden whitespace-nowrap" tabindex="-1">
           <Link
             :href="route('recipients.edit', props.row.id)"
             as="button"
@@ -209,7 +209,7 @@
         <Link
           :href="route('recipients.index')"
           type="button"
-          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-none"
+          class="inline-flex items-center rounded-md border border-transparent bg-cyan-400 hover:bg-cyan-300 text-cyan-900 px-4 py-2 text-sm font-medium shadow-sm focus:outline-hidden"
         >
           View All Recipients
         </Link>
